@@ -7,48 +7,49 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.Socket;
 
-public class Response implements Serializable{
+public class Response implements Serializable {
 
 	private static final long serialVersionUID = 7729766224350185410L;
 
 	private int state;
-	 
-	 private String message;
-	 
-	 private String token;
-	 
-	 private Object data;
-	 
 
-	 public Response() {
+	private String message;
+
+	private String path;
+
+	private String token;
+
+	private Object data;
+
+	public Response() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	public void success(String path, String message, String token, Object data) {
+		this.state = 200;
+		this.path = path;
+		this.message = message;
+		this.token = token;
+		this.data = data;
 
-	public void success( String message,String token, Object data) {
-			this.state = 200;
-			this.message = message;
-			this.token = token;
-			this.data = data;
-	 }
-	 
-	 public void fail(int state, String message,String token, Object data) {
-			this.state = state;
-			this.message = message;
-			this.token = token;
-			this.data = data;
-	 }
-	 
-	public Response(int state, String message,String token, Object data) {
-		super();
+	}
+
+	public void fail(String path, int state, String message, String token, Object data) {
+		this.path = path;
 		this.state = state;
 		this.message = message;
 		this.token = token;
 		this.data = data;
 	}
 
-	
+	public Response(String path,int state, String message, String token, Object data) {
+		this.path = path;
+		this.state = state;
+		this.message = message;
+		this.token = token;
+		this.data = data;
+	}
 
 	public int getState() {
 		return state;
@@ -82,13 +83,20 @@ public class Response implements Serializable{
 		this.data = data;
 	}
 
-	
-	@Override
-	public String toString() {
-		return "Response [state=" + state + ", message=" + message + ", token=" + token + ", data=" + data + "]";
+	public String getPath() {
+		return path;
 	}
 
-	
-	
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	@Override
+	public String toString() {
+		return "Response [state=" + state + ", message=" + message + ", path=" + path + ", token=" + token + ", data="
+				+ data + "]";
+	}
+
 	 
+
 }

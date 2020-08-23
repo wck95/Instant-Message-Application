@@ -34,7 +34,7 @@ public class HomePage extends JFrame{
 	public void createFrame() {
 		
 		this.add(createUserMenu());
-		FriendListView fiFriendListView = new FriendListView(this.user);
+//		FriendListView fiFriendListView = new FriendListView(this.user);
 		
 		this.setBounds(533, 155, 900, 750);
 		this.setVisible(true);

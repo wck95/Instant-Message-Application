@@ -37,7 +37,6 @@ public class TalkThread extends Thread {
 					String msg = message.getMsg();
 					jTextArea.append(msg+"\n");
 				}
-				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

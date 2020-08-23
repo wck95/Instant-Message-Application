@@ -16,14 +16,14 @@ import com.fenglin.commons.model.Record;
 
 public class DbExecute {
 
-	public static int Update(String sql, Object obj) {
+	public static int executeUpdate(String sql) {
 		int row = 0;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		try {
 			conn = DBUtils.getConnection();
 			stmt = conn.prepareStatement(sql);
-			row = stmt.executeUpdate();
+			row = stmt.executeUpdate(); 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -32,23 +32,6 @@ public class DbExecute {
 		return row;
 	}
 	
-	public static int Insert(String sql, Object obj) {
-		int row = 0;
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		try {
-			conn = DBUtils.getConnection();
-			stmt = conn.prepareStatement(sql);
-			row = stmt.executeUpdate();
-			System.out.println("insert.rows="+row);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(null, stmt, conn);
-		}
-		return row;
-	}
-
 	public static List<Record> executeQuery(String sql) {
 		List<Record> result = new ArrayList<Record>();
 		Connection conn = null;

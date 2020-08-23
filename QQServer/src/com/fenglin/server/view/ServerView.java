@@ -25,7 +25,7 @@ public class ServerView extends JFrame{
 //		 this.setResizable(false);
 //		 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 try {
-			 System.out.println("QQ服务器启动了");
+			System.out.println("QQ-Server-启动了");
 			DispathServlet();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -40,7 +40,6 @@ public class ServerView extends JFrame{
 			  Socket socket = serverSocket.accept();
 			  
 			  Request request = (Request) SocketUtils.readeRequest(socket);
-			  System.out.println("sever-request="+request);
 			  if("register".equals(request.getPath())) response =  service.register(request); 
 				
 			  if("updateUserInfo".equals(request.getPath())) response =  service.updateUserInfo(request); 
@@ -48,6 +47,7 @@ public class ServerView extends JFrame{
 			  if("getFirends".equals(request.getPath())) response =  service.getFirends(request); 
 			  
 			  SocketUtils.sendResponse(socket, response);
+			  socket.close();
 		  }
 	 }
 	 

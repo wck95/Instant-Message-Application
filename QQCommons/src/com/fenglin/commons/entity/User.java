@@ -15,6 +15,7 @@ public class User extends BaseEntity {
 	private String salt;
 	private int grade;
 	private int state;
+	private int online;
 	private String firendsIds ;
 	
 	public User() {
@@ -100,6 +101,14 @@ public class User extends BaseEntity {
 		this.firendsIds = firendsIds;
 	}
 	
+	
+	public int getOnline() {
+		return online;
+	}
+
+	public void setOnline(int online) {
+		this.online = online;
+	}
 
 	public int getState() {
 		return state;

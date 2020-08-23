@@ -47,14 +47,15 @@ public class TalkThread extends Thread {
 		while (isColse) {
 			try {
 				Request requ = SocketUtils.readeRequest(socket);
-				if ("talk".equals(requ.getPath())) { talkDispose(requ);	}
-				if ("socketClose".equals(requ.getPath())) { 
+				if ("talk".equals(requ.getPath()))  talkDispose(requ);	
+				if ("TallkViewClose".equals(requ.getPath())) { 
 					isColse = false;
 					int friendId = (int) requ.getData();
+					System.out.println("socketClose--->1"+ThreadManage.threadMap);
 					User u = JacksonUtils.json2pojo(requ.getToken(), User.class); 
 					ThreadManage.threadMap.remove(u.getId()+"-"+friendId );
-					System.out.println("socketClose--->"+ThreadManage.threadMap);
-				 }
+					System.out.println("socketClose--->2"+ThreadManage.threadMap);
+			  }
 			} catch (Exception e) { e.printStackTrace(); }
 		}
 	}
@@ -72,11 +73,16 @@ public class TalkThread extends Thread {
 				SocketUtils.farwardRequest(friendSocket, request);
 			}else {
 				Socket soc = new Socket("localhost",80);
-				Request re = new Request("get", "loginCheck", request.getToken(), friendsId, "localhost", 8081);
+				Request re = new Request("get", "loginCheck", request.getToken(), friendsId);
 				SocketUtils.sendRequest(soc, re);
 				Response resp = SocketUtils.readeResponse(soc);
+			
 				if(resp.getData() != null) {
 					System.out.println("用户一登陆了但是没有注册到tklkThread....");
+					Socket loginSocket = (Socket) resp.getData();
+					User friend = JacksonUtils.json2pojo(resp.getToken(), User.class);
+					re = new Request("get", "msg-inform", request.getToken(), friend);
+					SocketUtils.sendRequest(loginSocket, re);
 				}else {
 					System.out.println("用户没有登陆不在线!将会话信息战时缓存到服务器的临时内存中");
 				}

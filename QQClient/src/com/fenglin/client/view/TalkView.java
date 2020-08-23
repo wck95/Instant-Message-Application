@@ -12,9 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,7 +30,6 @@ import com.fenglin.tcp.SocketUtils;
 
 public class TalkView extends JFrame {
 	
-
 	private static final long serialVersionUID = -4013696325793566870L;
 
 	private JPanel  southJPel;
@@ -56,7 +52,6 @@ public class TalkView extends JFrame {
 	}
 
 	public void createFrame() {
-
 		jTextArea = new JTextArea();
 		jTextArea.setFont(new Font(Font.DIALOG, Font.PLAIN, 18));
 		jTextArea.setEditable(false);
@@ -88,23 +83,9 @@ public class TalkView extends JFrame {
 		this.setBounds(533, 180, 500, 450);
 		this.setVisible(true);
 		this.setResizable(false);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		this.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				 //当聊天页面被关闭时需要将socket关闭否者会报错
-				try {
-					System.out.println(user.getUsername() + "与" + firends.getUsername() + "的聊天窗口被关闭了!");
-					String token = JacksonUtils.obj2json(user);
-					Request requ = new Request("post", "socketClose", token, firends.getId());
-					SocketUtils.sendRequest(socket, requ);
-					talkThead.close();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
+		windowsClose( talkThead);
 	}
 	
 	private void jButtonListener(JButton sendjButton){
@@ -118,7 +99,6 @@ public class TalkView extends JFrame {
 		});
 		
 		jTextField.addKeyListener(new KeyListener() {
-			
 			@Override
 			public void keyTyped(KeyEvent e) {
 			}
@@ -146,10 +126,28 @@ public class TalkView extends JFrame {
 					new Message(user.getUsername()+"说:"+keyTalk, firends.getId()),
 					"localhost",8888);
 			SocketUtils.sendRequest(socket, request);
-			
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 	}
 	
+	private void windowsClose(TalkThread talkThead) {
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+			    super.windowClosing(e);
+				 //当聊天页面被关闭时需要将socket关闭否者会报错
+				try {
+					System.out.println(user.getUsername() + "与" + firends.getUsername() + "的聊天窗口被关闭了!");
+					String token = JacksonUtils.obj2json(user);
+					Request requ = new Request("post", "TallkViewClose", token, firends.getId());
+					System.out.println("socketClose---requ--->"+requ);
+					SocketUtils.sendRequest(socket, requ);
+					talkThead.close();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+	}
 }

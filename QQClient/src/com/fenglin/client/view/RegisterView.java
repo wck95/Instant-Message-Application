@@ -188,7 +188,7 @@ public class RegisterView extends JFrame {
 					}
 
 					UserService service = new UserService();
-					Response result = service.dispose(new User(username, password), "localhost", 9999, "register", "post");
+					Response result = service.dispose(new User(username, password), "localhost", 9999, "register", "post",true);
 
 					System.out.println("result=" + result.toString());
 
@@ -196,12 +196,8 @@ public class RegisterView extends JFrame {
 					// 登录成功 进入好友列表页面
 					if (result.getState() == 200) {
 						RegisterView.this.dispose();
-						User user = null;
-
-						user = (User) JacksonUtils.json2pojo(result.getToken(), User.class);
-
-						FriendListView friendListView = new FriendListView(user);
-						friendListView.createFrame();
+						LoginView loginView = new LoginView();
+						loginView.createFrame();
 					} else {
 						ViewMessageBox.Warning(RegisterView.this, result.getMessage());
 					}
@@ -222,7 +218,6 @@ public class RegisterView extends JFrame {
 				login.createFrame(); 
 			}
 		});
-		
 	}
 	
 	private boolean fromIsNullCheck(String username, String password, String pwdConfirm) {

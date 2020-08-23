@@ -43,7 +43,7 @@ public class SocketUtils {
 	}
 
 	
-	public Response dispose(BaseEntity entity, String ip, int port, String path, String method) {
+	public Response dispose(BaseEntity entity, String ip, int port, String path, String method, boolean isCloseSocket) {
 		 Response result = null;
 		 try {
 			Socket socket = new Socket(ip,port);
@@ -56,6 +56,8 @@ public class SocketUtils {
 			sendRequest(socket, request);
 			
 		    result = (Response) readeResponse(socket);
+		    
+		    if(isCloseSocket) socket.close();
 		} catch (Exception  e) {
 			e.printStackTrace();
 		} 

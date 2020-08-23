@@ -18,21 +18,22 @@ public class UserService {
 			User user = (User) request.getData();
 
 			String sql = "select * from tb_user where username= '" + user.getUsername() + "' " ;
+			
 			List<Record> list =  DbExecute.executeQuery(sql);
-			System.out.println(list);
-			if (list != null && list.size()>0) return new Response(212, "账号已存在,请重新输入账号", null, null);
+			 
+			if (list != null && list.size()>0) return new Response("register",212, "账号已存在,请重新输入账号", null, null);
 
 			String sql1 = "insert into tb_user(username,password) values('" + user.getUsername() + "', "+"'" + user.getPassword() + "')";
 			
-			int rows = DbExecute.Insert(sql1,user);
+			int rows = DbExecute.executeUpdate(sql1);
 			
 			if( rows > 0) {
 				List<Record> list1  = DbExecute.executeQuery(sql);
 				User u = new User();
 				RecordClassCast.RecordToObject(u, list1.get(0).getMap());
-				response =  new Response(200, "注册成功!", JacksonUtils.obj2json(u), null);
+				response =  new Response("register",200, "注册成功!", JacksonUtils.obj2json(u), null);
 			}else {
-				response =  new Response(500, "注册失败: 网络异常,请稍后重试!", null, null);
+				response =  new Response("register",500, "注册失败: 网络异常,请稍后重试!", null, null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,10 +50,10 @@ public class UserService {
 
 			String sql1 = "update  tb_user set password = ?";
 
-			int rows = DbExecute.Update(sql1,user);
+			int rows = DbExecute.executeUpdate(sql1);
 
-			response = rows > 0 ? new Response(200, "修改成功!", token, null)
-					: new Response(500, "修改失败: 网络异常,请稍后重试!", token, null);
+			response = rows > 0 ? new Response("updateUserInfo",200, "修改成功!", token, null)
+					: new Response("updateUserInfo",500, "修改失败: 网络异常,请稍后重试!", token, null);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,12 +76,11 @@ public class UserService {
 						buffer.append("'" + ids[i] + "',");
 					}
 				}
-				System.out.println("ids="+buffer.toString());
+				System.out.println("getFirends--->获取朋友列表--->"+buffer.toString());
 				String sql = "select * from tb_user where id in (" + buffer.toString() + ")";
-
 				List<Record> list = DbExecute.executeQuery(sql);
-				response = list != null ? new Response(200, "好友列表获取成功!", token, list)
-						: new Response(500, "好友列表获取失败: 网络异常,请稍后重试!", token, null);
+				response = list != null ? new Response("getFirends",200, "好友列表获取成功!", token, list)
+						: new Response("getFirends",500, "好友列表获取失败: 网络异常,请稍后重试!", token, null);
 			}
 			
 		} catch (Exception e) {

@@ -110,10 +110,11 @@ public class Request implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Request [method=" + method + ", token=" + token + ", data=" + data + ", host=" + host + ", port=" + port
-				+ "]";
+		return "Request [method=" + method + ", path=" + path + ", data=" + data + ", host=" + host + ", port=" + port
+				+ ", sendTime=" + sendTime + "]";
 	}
 
+ 
 	
 	
 	
